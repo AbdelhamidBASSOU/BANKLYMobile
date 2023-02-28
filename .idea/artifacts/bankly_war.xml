@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="bankly:war">
+    <output-path>$PROJECT_DIR$/banklySpring/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>bankly</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="bankly-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="bankly:war exploded" />
+    </root>
+  </artifact>
+</component>
