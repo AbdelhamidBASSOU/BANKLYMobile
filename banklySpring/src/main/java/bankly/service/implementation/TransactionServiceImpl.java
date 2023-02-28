@@ -50,10 +50,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public void credit(Long walletId, Double amount) {
+        Wallet wallet = walletService.getOne(walletId);
+        double currentBalance = wallet.getBalance();
+        Double newBalance = currentBalance - amount;
         Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
+        transaction.setAmount(newBalance);
         transaction.setType(Type.DEPOSIT);
+        wallet.setBalance(newBalance);
         transactionRepository.save(transaction);
+        walletRepository.save(wallet);
     }
 
 }
