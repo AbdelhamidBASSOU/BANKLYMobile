@@ -1,9 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../model/Wallet.dart';
+import '../model/WalletModel.dart';
 
 class WalletService {
-  final String baseUrl = 'http://localhost:8089/api/wallet/Wallet/';
+  final String baseUrl = 'http://localhost:8089/api/wallet/';
+
+  Future<double> getBalance(int id) async {
+    final wallet = await getWalletById(id);
+    return wallet.balance;
+  }
 
   Future<Wallet> getWalletById(int id) async {
     final response = await http.get(Uri.parse(baseUrl + id.toString()));
@@ -14,20 +19,4 @@ class WalletService {
     }
   }
 
-  Future<Wallet> updateWalletBalance(int id, double newBalance) async {
-    final response = await http.put(
-      Uri.parse(baseUrl + id.toString()),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'balance': newBalance,
-      }),
-    );
-    if (response.statusCode == 200) {
-      return Wallet.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to update wallet balance');
-    }
-  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
+import 'wallet_home.dart';
 class WalletTransactionPage extends StatefulWidget {
   final double balance;
 
@@ -14,11 +16,52 @@ class _WalletTransactionPageState extends State<WalletTransactionPage> {
   TextEditingController _amountController = TextEditingController();
   bool _isDeposit = true;
 
+  Future<void> _deposit() async {
+    String url = 'http://172.16.10.205:8089/api/transaction/credit';
+    double amount = double.parse(_amountController.text);
+    final response = await http.post(Uri.parse(url), body: {
+      'walletId': '1', // Replace with the actual wallet ID
+      'amount': amount.toStringAsFixed(2),
+    });
+    if (response.statusCode == 200) {
+      // Success
+      print(response.body);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => WalletHomePage()),
+      );
+    } else {
+      // Error
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> _withdraw() async {
+    String url = 'http://172.16.10.205:8089/api/transaction/debit';
+    double amount = double.parse(_amountController.text);
+    final response = await http.post(Uri.parse(url), body: {
+      'walletId': '1', // Replace with the actual wallet ID
+      'amount': amount.toStringAsFixed(2),
+    });
+    if (response.statusCode == 200) {
+      // Success
+      print(response.body);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => WalletHomePage()),
+      );
+    } else {
+      // Error
+      print(response.reasonPhrase);
+    }
+  }
+
   @override
   void dispose() {
     _amountController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -99,16 +142,10 @@ class _WalletTransactionPageState extends State<WalletTransactionPage> {
                     child: Text('Cancel'),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        double amount = double.parse(_amountController.text);
-                        double updatedBalance =
-                        _isDeposit ? widget.balance + amount : widget.balance - amount;
-                        Navigator.pop(context, updatedBalance);
-                      }
-                    },
+                    onPressed: _isDeposit ? _deposit : _withdraw,
                     child: Text(_isDeposit ? 'Deposit' : 'Withdraw'),
                   ),
+
                 ],
               ),
             ],

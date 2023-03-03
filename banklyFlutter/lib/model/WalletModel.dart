@@ -1,17 +1,13 @@
-import 'package:wallet/model/Transaction.dart';
-
-import 'CurrencyModel.dart';
+import 'package:wallet/model/TransactionModel.dart';
 
 class Wallet {
   final int id;
   final double balance;
-  final Currency currency;
   final List<Transaction> transactions;
 
   Wallet({
     required this.id,
     required this.balance,
-    required this.currency,
     required this.transactions,
   });
 
@@ -27,7 +23,6 @@ class Wallet {
     return Wallet(
       id: json['id'],
       balance: json['balance'],
-      currency: json['currency'],
       transactions: transactions,
     );
   }

@@ -12,6 +12,7 @@ import java.util.List;
     @RestController
     @RequiredArgsConstructor
     @RequestMapping("/api/wallet")
+    @CrossOrigin(origins = "**")
     public class WalletResource {
         private final WalletService walletService;
 

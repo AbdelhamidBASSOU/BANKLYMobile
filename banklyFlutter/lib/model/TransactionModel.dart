@@ -22,4 +22,14 @@ class Transaction {
       walletId: json['walletId'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'date': date.toIso8601String(),
+      'amount': amount,
+      'type': type.toString().split('.').last,
+      'walletId': walletId,
+    };
+  }
 }
